@@ -4,7 +4,7 @@ scalaVersion := "2.11.8"
 
 val akkaVersion = "2.4.9"
 
-val reaktiveVersion = "0.0.10"
+val reaktiveVersion = "0.0.11-SNAPSHOT"
 
 lazy val projectSettings = PB.protobufSettings ++ Seq(
   licenses := Seq(("MIT", url("http://opensource.org/licenses/MIT"))),
@@ -68,10 +68,20 @@ lazy val projectSettings = PB.protobufSettings ++ Seq(
   }
 )
 
-lazy val reaktiveSettings = projectSettings ++ Seq(
-  libraryDependencies ++= {
+lazy val persistenceSettings = projectSettings ++ Seq(
+  libraryDependencies ++= Seq(
+    "com.typesafe.akka" %% "akka-persistence" % akkaVersion,
+    "org.iq80.leveldb"            % "leveldb"          % "0.7",
+    "org.fusesource.leveldbjni"   % "leveldbjni-all"   % "1.8",   
+    "com.github.dnvriend" %% "akka-persistence-inmemory" % "1.3.5" % "test"
+  ),
   
-  Seq(
+  // levelDB uses JNI, which only works in SBT if forking when running
+  fork in run := true
+)
+
+lazy val reaktiveSettings = persistenceSettings ++ Seq(
+  libraryDependencies ++= Seq(
     "com.tradeshift" % "ts-reaktive-actors" % reaktiveVersion,
     "com.tradeshift" % "ts-reaktive-actors" % reaktiveVersion % PB.protobufConfig.name,
     "com.tradeshift" %% "ts-reaktive-akka" % reaktiveVersion,
@@ -84,24 +94,13 @@ lazy val reaktiveSettings = projectSettings ++ Seq(
     "com.tradeshift" % "ts-reaktive-marshal" % reaktiveVersion,
     "com.tradeshift" % "ts-reaktive-testkit" % reaktiveVersion % "test",
     "com.tradeshift" % "ts-reaktive-testkit-assertj" % reaktiveVersion % "test",    
-    "com.github.tomakehurst" % "wiremock" % "1.58" % "test",
-    "org.apache.cassandra" % "cassandra-all" % "3.0.3" % "test" exclude("ch.qos.logback", "logback-classic")    
+    "com.github.tomakehurst" % "wiremock" % "1.58" % "test"
   )
-})
+)
 
 lazy val `example-1-akka` = project.settings(projectSettings: _*)
 
-lazy val `example-2-persistence` = project.settings(projectSettings ++ Seq(
-  libraryDependencies ++= Seq(
-    "com.typesafe.akka" %% "akka-persistence" % akkaVersion,
-    "org.iq80.leveldb"            % "leveldb"          % "0.7",
-    "org.fusesource.leveldbjni"   % "leveldbjni-all"   % "1.8",   
-    "com.github.dnvriend" %% "akka-persistence-inmemory" % "1.3.5" % "test"
-  ),
-  
-  // levelDB uses JNI, which only works in SBT if forking when running
-  fork in run := true
-): _*)
+lazy val `example-2-persistence` = project.settings(persistenceSettings: _*)
 
 lazy val `example-3-reaktive` = project.settings(reaktiveSettings: _*)
 

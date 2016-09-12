@@ -1,0 +1,14 @@
+<html>
+<head>
+<title>Index</title>
+<script>
+function join() {
+window.location = '/conversation.html?id=' + document.getElementById('conversationId').value ;
+}
+
+</script>
+</head>
+<body>
+Join a conversation: <input type='text' id='conversationId' value='monkeys'/> <input type='button' value='Join' onclick='join();'/>
+</body>
+</html>
