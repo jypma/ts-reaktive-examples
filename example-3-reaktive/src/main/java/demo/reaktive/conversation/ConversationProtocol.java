@@ -7,7 +7,6 @@ import java.util.concurrent.CompletionStage;
 import akka.Done;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import akka.actor.Props;
 import javaslang.collection.Seq;
 
 /**
@@ -17,7 +16,7 @@ public class ConversationProtocol {
     private final ActorRef supervisor;
     
     public ConversationProtocol(ActorSystem system) {
-        this.supervisor = system.actorOf(Props.create(ConversationSupervisor.class));
+        this.supervisor = ConversationActor.sharding().shardRegion(system);
     }
 
     public CompletionStage<Done> postMessage(String conversationId, String message) {
