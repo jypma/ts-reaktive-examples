@@ -2,9 +2,9 @@ import sbtprotobuf.{ProtobufPlugin=>PB}
 
 scalaVersion := "2.11.8"
 
-val akkaVersion = "2.4.9"
+val akkaVersion = "2.4.10"
 
-val reaktiveVersion = "0.0.11-SNAPSHOT"
+val reaktiveVersion = "0.0.11"
 
 lazy val projectSettings = PB.protobufSettings ++ Seq(
   licenses := Seq(("MIT", url("http://opensource.org/licenses/MIT"))),
