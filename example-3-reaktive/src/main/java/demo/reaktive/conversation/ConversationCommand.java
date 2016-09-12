@@ -14,7 +14,7 @@ public abstract class ConversationCommand implements Serializable {
         return conversationId;
     }
     
-    public static final class GetMessageList extends ConversationCommand {
+    public static class GetMessageList extends ConversationCommand {
         private static final long serialVersionUID = 1L;
         
         public GetMessageList(String conversationId) {
@@ -22,7 +22,7 @@ public abstract class ConversationCommand implements Serializable {
         }
     }
     
-    public static final class PostMessage extends ConversationCommand {
+    public static class PostMessage extends ConversationCommand {
         private static final long serialVersionUID = 1L;
         private final String message;
         
