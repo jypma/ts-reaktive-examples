@@ -4,8 +4,8 @@ Examples for ts-reaktive
 This repository contains examples on building a reactive chat application, using several steps:
 
 1. [example-1-akka](example-1-akka): Create a chat application using plain Akka.
-2. [example-2-persistence](example-2-persistence): Add akka persistence so messages are rememered after a restart
-3. [example-3-reaktive](example-3-reaktive): Introduce [ts-reaktive](https://github.com/Tradeshift/ts-reaktive/) for event sourcing integration and streaming marshalling
+2. [example-2-persistence](example-2-persistence): Add akka persistence so messages are remembered after a restart
+3. [example-3-reaktive](example-3-reaktive): Introduce [ts-reaktive](https://github.com/Tradeshift/ts-reaktive/) for easy clustering, integration, and streaming marshalling
 
 ### Developing using the command line
 

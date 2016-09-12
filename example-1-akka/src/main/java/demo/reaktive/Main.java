@@ -12,7 +12,7 @@ public class Main {
     {
         ActorSystem system = ActorSystem.create();
         Materializer materializer = ActorMaterializer.create(system);
-        ConversationProtocol conversationProtocol = new ConversationProtocol();
+        ConversationProtocol conversationProtocol = new ConversationProtocol(system);
         RootRoute rootRoute = new RootRoute(conversationProtocol);
         
         Http.get(system).bindAndHandle(
