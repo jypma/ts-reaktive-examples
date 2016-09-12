@@ -98,6 +98,8 @@ lazy val reaktiveSettings = persistenceSettings ++ Seq(
   )
 )
 
+lazy val `example-0-base` = project.settings(projectSettings: _*)
+
 lazy val `example-1-akka` = project.settings(projectSettings: _*)
 
 lazy val `example-2-persistence` = project.settings(persistenceSettings: _*)
@@ -105,6 +107,7 @@ lazy val `example-2-persistence` = project.settings(persistenceSettings: _*)
 lazy val `example-3-reaktive` = project.settings(reaktiveSettings: _*)
 
 lazy val root = (project in file(".")).settings(publish := { }, publishLocal := { }).aggregate(
+  `example-0-base`,
   `example-1-akka`,
   `example-2-persistence`,
   `example-3-reaktive`
