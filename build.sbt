@@ -2,6 +2,10 @@ import sbtprotobuf.{ProtobufPlugin=>PB}
 
 scalaVersion := "2.11.8"
 
+val akkaVersion = "2.4.9"
+
+val reaktiveVersion = "0.0.10"
+
 lazy val projectSettings = PB.protobufSettings ++ Seq(
   licenses := Seq(("MIT", url("http://opensource.org/licenses/MIT"))),
   organization := "com.tradeshift",
@@ -44,7 +48,6 @@ lazy val projectSettings = PB.protobufSettings ++ Seq(
   
   // Shared dependencies for all projects
   libraryDependencies ++= {
-    val akkaVersion = "2.4.9"
     Seq(
       "com.typesafe.akka" %% "akka-actor" % akkaVersion,
       "com.typesafe.akka" %% "akka-http-experimental" % akkaVersion,
@@ -52,15 +55,21 @@ lazy val projectSettings = PB.protobufSettings ++ Seq(
       "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,    
       "io.javaslang" % "javaslang" % "2.0.1",
       "org.slf4j" % "slf4j-api" % "1.7.12",
-      "org.slf4j" % "slf4j-log4j12" % "1.7.12" % "test"
+      "org.slf4j" % "slf4j-log4j12" % "1.7.12" % "test",
+      "com.typesafe.akka" %% "akka-http-testkit" % akkaVersion % "test",
+      "junit" % "junit" % "4.11" % "test",
+      "org.assertj" % "assertj-core" % "3.2.0" % "test",
+      "org.mockito" % "mockito-core" % "1.10.19" % "test",
+      "info.solidsoft.mockito" % "mockito-java8" % "0.3.0" % "test",
+      "com.novocode" % "junit-interface" % "0.11" % "test",
+      "org.forgerock.cuppa" % "cuppa" % "1.1.0" % "test",
+      "org.forgerock.cuppa" % "cuppa-junit" % "1.1.0" % "test"
     )
   }
 )
 
 lazy val reaktiveSettings = projectSettings ++ Seq(
   libraryDependencies ++= {
-  val akkaVersion = "2.4.9"
-  val reaktiveVersion = "0.0.10"
   
   Seq(
     "com.tradeshift" % "ts-reaktive-actors" % reaktiveVersion,
@@ -74,24 +83,25 @@ lazy val reaktiveSettings = projectSettings ++ Seq(
     "com.tradeshift" %% "ts-reaktive-kamon-log4j" % reaktiveVersion,
     "com.tradeshift" % "ts-reaktive-marshal" % reaktiveVersion,
     "com.tradeshift" % "ts-reaktive-testkit" % reaktiveVersion % "test",
-    "com.tradeshift" % "ts-reaktive-testkit-assertj" % reaktiveVersion % "test",
-    "com.typesafe.akka" %% "akka-http-testkit" % akkaVersion % "test", // we also write tests using akka's plain testkit
-    "com.tradeshift" %% "spray-caching" % "0.1-201603291310",
-    "junit" % "junit" % "4.11" % "test",
-    "org.assertj" % "assertj-core" % "3.2.0" % "test",
-    "org.mockito" % "mockito-core" % "1.10.19" % "test",
-    "info.solidsoft.mockito" % "mockito-java8" % "0.3.0" % "test",
-    "com.novocode" % "junit-interface" % "0.11" % "test",
-    "org.forgerock.cuppa" % "cuppa" % "1.1.0" % "test",
-    "org.forgerock.cuppa" % "cuppa-junit" % "1.1.0" % "test",
-    "org.apache.cassandra" % "cassandra-all" % "3.0.3" % "test" exclude("ch.qos.logback", "logback-classic"),
-    "com.github.tomakehurst" % "wiremock" % "1.58" % "test"
+    "com.tradeshift" % "ts-reaktive-testkit-assertj" % reaktiveVersion % "test",    
+    "com.github.tomakehurst" % "wiremock" % "1.58" % "test",
+    "org.apache.cassandra" % "cassandra-all" % "3.0.3" % "test" exclude("ch.qos.logback", "logback-classic")    
   )
 })
 
 lazy val `example-1-akka` = project.settings(projectSettings: _*)
 
-lazy val `example-2-persistence` = project.settings(projectSettings: _*)
+lazy val `example-2-persistence` = project.settings(projectSettings ++ Seq(
+  libraryDependencies ++= Seq(
+    "com.typesafe.akka" %% "akka-persistence" % akkaVersion,
+    "org.iq80.leveldb"            % "leveldb"          % "0.7",
+    "org.fusesource.leveldbjni"   % "leveldbjni-all"   % "1.8",   
+    "com.github.dnvriend" %% "akka-persistence-inmemory" % "1.3.5" % "test"
+  ),
+  
+  // levelDB uses JNI, which only works in SBT if forking when running
+  fork in run := true
+): _*)
 
 lazy val `example-3-reaktive` = project.settings(reaktiveSettings: _*)
 

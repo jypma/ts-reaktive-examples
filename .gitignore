@@ -1,5 +1,6 @@
 target
 bin
+journal
 project/project
 .classpath
 .project
