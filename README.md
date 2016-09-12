@@ -9,7 +9,13 @@ This repository contains examples on building a reactive chat application, using
 
 ### Developing using the command line
 
-The project is built using [sbt](http://www.scala-sbt.org/) as a multi-project build for consistency. In order to run example 1, type `sbt "project example-1-akka" run`. For more information, refer to the sbt documentation.
+The project is built using [sbt](http://www.scala-sbt.org/) as a multi-project build for consistency. 
+
+In order to run example 1, type `sbt "project example-1-akka" run`. 
+
+Command-line arguments can be given by quoting "run" as well, e.g. `sbt "project example-3-reaktive" "run 1"`
+
+For more information, refer to the sbt documentation.
 
 ### Developing using Eclipse
 
