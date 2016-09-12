@@ -13,7 +13,7 @@ cp -rp example-2-persistence/src/main/java example-3-reaktive/src/main
 rm -rf example-2-persistence/*
 rm -rf example-1-akka/*
 rm -rf example-0-base/*
-tar czvf workshop-3-reaktive.tgz build.sbt example* project README*
+tar czvf workshop-3-reaktive.tgz build.sbt example* project README* sbt*
 
 git reset HEAD --hard
 rm -rf example-2-reaktive/src/main/java
@@ -21,7 +21,7 @@ cp -rp example-1-akka/src/main/java example-2-persistence/src/main
 rm -rf example-3-reaktive/*
 rm -rf example-1-akka/*
 rm -rf example-0-base/*
-tar czvf workshop-2-persistence.tgz build.sbt example* project README*
+tar czvf workshop-2-persistence.tgz build.sbt example* project README* sbt*
 
 git reset HEAD --hard
 rm -rf example-1-akka/src/main/java
@@ -29,7 +29,7 @@ cp -rp example-0-base/src/main/java example-1-akka/src/main
 rm -rf example-3-reaktive/*
 rm -rf example-2-persistence/*
 rm -rf example-0-base/*
-tar czvf workshop-1-akka.tgz build.sbt example* project README*
+tar czvf workshop-1-akka.tgz build.sbt example* project README* sbt*
 
 git reset HEAD --hard
 
