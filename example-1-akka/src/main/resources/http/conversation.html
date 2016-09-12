@@ -1,0 +1,70 @@
+
+<html>
+<head>
+<title>Conversation</title>
+<script>
+function getQueryParameter(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function clearIfNeeded() {
+    var msg = document.getElementById("message").value;
+    if (msg === "Enter message...") {
+        document.getElementById("message").value = "";
+    }
+}
+
+function loadMessages() {
+    var rq = new XMLHttpRequest();
+    rq.open("GET", "/conversations/" + getQueryParameter("id"), true);
+    rq.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var msgs = JSON.parse(this.responseText);
+            var container = document.getElementById("messages");
+            container.innerHTML = "";
+            for (var i = 0; i < msgs.length; i++) {
+                var p = document.createElement('div');
+                p.appendChild(document.createTextNode(msgs[i]));
+                container.appendChild(p);
+            }
+        }
+    };
+    rq.send();
+}
+
+function postMessage() {
+    var msg = document.getElementById("message").value;
+    if ((msg === "") || (msg === "Enter message...")) {
+        return;
+    }
+    document.getElementById("message").value = "";
+    
+    var rq = new XMLHttpRequest();
+    rq.open("POST", "/conversations/" + getQueryParameter("id"), true);
+    rq.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            loadMessages();
+        }
+    };
+    rq.send(msg);
+}
+
+document.title = getQueryParameter("id");
+window.onload = function() {
+    loadMessages();
+};
+
+// None of that fancy web socket or hanging GET rubbish... yet! ;-)
+window.setInterval(loadMessages, 2000);
+
+</script>
+</head>
+<body>
+  <div style='width: 800px; height: 600px; overflow: auto' id='messages'></div>
+  <div>
+    <input type='text' value='Enter message...' id='message' onclick="clearIfNeeded();" onkeydown="if (event.keyCode == 13) { postMessage() }" />
+    <input type='button' value='Post' onclick="postMessage();"/>
+  </div> 
+</body>
+</html>

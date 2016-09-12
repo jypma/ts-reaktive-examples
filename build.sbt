@@ -7,35 +7,54 @@ lazy val projectSettings = PB.protobufSettings ++ Seq(
   organization := "com.tradeshift",
   version := "0.0.1-SNAPSHOT",
   scalaVersion := "2.11.8",
-  publishMavenStyle := true,
   javacOptions ++= Seq("-source", "1.8"),
   javacOptions in (Compile, Keys.compile) ++= Seq("-target", "1.8", "-Xlint", "-Xlint:-processing", "-Xlint:-serial", "-Werror"),
   javacOptions in doc ++= Seq("-Xdoclint:none"),
+  
+  // Eclipse: Generate Java 8 projects
   EclipseKeys.executionEnvironment := Some(EclipseExecutionEnvironment.JavaSE18),
+  
+  // Eclipse: Download sources for dependencies
   EclipseKeys.withSource := true,  
+  
+  // Eclipse: Create Java project nature, not Scala
+  EclipseKeys.projectFlavor := EclipseProjectFlavor.Java,
+  
+  // Publish without the scala version in the artifact name
   crossPaths := false,
+  
+  // Don't add the scala dependency automatically
   autoScalaLibrary := false,
+  
+  // Run tests sequentially (pending https://github.com/cuppa-framework/cuppa/pull/113)
   parallelExecution in Test := false,
+  
+  // Find some extra artifacts
   resolvers ++= Seq(
     Resolver.bintrayRepo("readytalk", "maven"),
     Resolver.bintrayRepo("jypma", "maven"),
     Resolver.jcenterRepo),
+    
+  // Set up protobuf
   dependencyOverrides += "com.google.protobuf" % "protobuf-java" % "2.6.1",
   unmanagedResourceDirectories in Compile <+= (sourceDirectory in PB.protobufConfig),
   PB.runProtoc in PB.protobufConfig := { args =>
     com.github.os72.protocjar.Protoc.runProtoc("-v261" +: args.toArray)
   },
+  
+  // Shared dependencies for all projects
   libraryDependencies ++= {
     val akkaVersion = "2.4.9"
     Seq(
       "com.typesafe.akka" %% "akka-actor" % akkaVersion,
+      "com.typesafe.akka" %% "akka-http-experimental" % akkaVersion,
+      "com.typesafe.akka" %% "akka-http-jackson-experimental" % akkaVersion,
       "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,    
       "io.javaslang" % "javaslang" % "2.0.1",
       "org.slf4j" % "slf4j-api" % "1.7.12",
       "org.slf4j" % "slf4j-log4j12" % "1.7.12" % "test"
     )
-  },
-  unmanagedResourceDirectories in Compile <+= (sourceDirectory in PB.protobufConfig)
+  }
 )
 
 lazy val reaktiveSettings = projectSettings ++ Seq(
