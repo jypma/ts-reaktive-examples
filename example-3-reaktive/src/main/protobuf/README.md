@@ -1,0 +1,1 @@
+Put your protobuf definitions here, and they'll be picked up by SBT.

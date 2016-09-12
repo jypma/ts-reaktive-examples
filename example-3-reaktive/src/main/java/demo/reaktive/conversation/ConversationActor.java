@@ -1,52 +1,40 @@
 package demo.reaktive.conversation;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.tradeshift.reaktive.actors.AbstractCommandHandler;
+import com.tradeshift.reaktive.actors.AbstractStatefulPersistentActor;
+import com.tradeshift.reaktive.actors.PersistentActorSharding;
 
-import akka.Done;
-import akka.japi.pf.ReceiveBuilder;
-import akka.persistence.AbstractPersistentActor;
+import akka.japi.pf.PFBuilder;
 import scala.PartialFunction;
-import scala.runtime.BoxedUnit;
 
 /**
  * Manages the state for a single conversation
  */
-public class ConversationActor extends AbstractPersistentActor {
-    private final List<String> messages = new ArrayList<>();
+public class ConversationActor extends AbstractStatefulPersistentActor<ConversationCommand, ConversationEvent, ConversationState> {
+    public static PersistentActorSharding<ConversationCommand> sharding() {
+        return PersistentActorSharding.of(ConversationActor.class, "conversation", ConversationCommand::getConversationId);
+    }
     
-    @Override
-    public PartialFunction<Object, BoxedUnit> receiveCommand() {
-        return ReceiveBuilder
-            .match(String.class, this::postMessage)
-            .match(GetMessageList.class, msg -> getMessageList())
-            .build();
+    public static abstract class Handler extends AbstractCommandHandler<ConversationCommand, ConversationEvent, ConversationState> {
+        public Handler(ConversationState state, ConversationCommand cmd) {
+            super(state, cmd);
+        }
+    }
+    
+    public ConversationActor() {
+        super(ConversationCommand.class, ConversationEvent.class);
     }
 
     @Override
-    public PartialFunction<Object, BoxedUnit> receiveRecover() {
-        return ReceiveBuilder
-            .match(String.class, messages::add)
-            .build();
+    protected ConversationState initialState() {
+        return ConversationState.EMPTY;
     }
-
-    private void postMessage(String msg) {
-        persist(msg, evt -> {
-            messages.add(msg);
-            sender().tell(Done.getInstance(), self());
-        });
-    }
-    
-    private void getMessageList() {
-        sender().tell(new ArrayList<>(messages), self());
-    }
-    
-    public static final class GetMessageList { private GetMessageList() {} }
-    /** Message that can be sent to this actor to retrieve the full message list */
-    public static final GetMessageList GET_MESSAGE_LIST = new GetMessageList();
     
     @Override
-    public String persistenceId() {
-        return self().path().name();
+    protected PartialFunction<ConversationCommand,Handler> applyCommand() {
+        return new PFBuilder<ConversationCommand,Handler>()
+            .match(ConversationCommand.GetMessageList.class, cmd -> new GetMessageListHandler(getState(), cmd))
+            .match(ConversationCommand.PostMessage.class, cmd -> new PostMessageHandler(getState(), cmd))
+            .build();
     }
 }

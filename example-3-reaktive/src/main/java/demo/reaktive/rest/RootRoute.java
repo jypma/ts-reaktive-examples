@@ -54,7 +54,7 @@ public class RootRoute {
                 ),
                 get(() ->
                     onSuccess(() -> conversations.getMessages(conversationId), msgs ->
-                        completeOK(msgs, Jackson.marshaller())
+                        completeOK(msgs.toJavaList(), Jackson.marshaller())
                     )
                 )
             )
