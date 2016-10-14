@@ -5,9 +5,19 @@
 # somewhere.
 
 git reset HEAD --hard
-rm -rf target/ */target project/project/target example-3-cluster/journal */.classpath */.settings */.project */bin
+rm -rf target/ */target project/project/target example-2-persistence/journal */.classpath */.settings */.project */bin
 rm *.tgz
 
+rm -rf example-4-stream/src/main/java
+cp -rp example-3-cluster/src/main/java example-4-stream/src/main/java
+rm -rf example-3-cluster/*
+rm -rf example-2-persistence/*
+rm -rf example-1-akka/*
+rm -rf example-0-base/*
+tar czvf workshop-4-stream.tgz build.sbt example* project README* sbt*
+
+git reset HEAD --hard
+rm -rf example-4-stream/src/main/java
 rm -rf example-3-cluster/src/main/java
 cp -rp example-2-persistence/src/main/java example-3-cluster/src/main
 rm -rf example-2-persistence/*
@@ -18,6 +28,7 @@ tar czvf workshop-3-cluster.tgz build.sbt example* project README* sbt*
 git reset HEAD --hard
 rm -rf example-2-reaktive/src/main/java
 cp -rp example-1-akka/src/main/java example-2-persistence/src/main
+rm -rf example-4-stream/src/main/java
 rm -rf example-3-cluster/*
 rm -rf example-1-akka/*
 rm -rf example-0-base/*
@@ -27,6 +38,7 @@ git reset HEAD --hard
 rm -rf example-1-akka/src/main/java
 cp -rp example-0-base/src/main/java example-1-akka/src/main
 rm -rf example-3-cluster/*
+rm -rf example-4-stream/src/main/java
 rm -rf example-2-persistence/*
 rm -rf example-0-base/*
 tar czvf workshop-1-akka.tgz build.sbt example* project README* sbt*
