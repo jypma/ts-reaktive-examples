@@ -102,7 +102,7 @@ lazy val `example-0-base` = project.settings(projectSettings: _*)
 
 lazy val `example-1-akka` = project.settings(projectSettings: _*)
 
-lazy val `example-2-persistence` = project.settings(persistenceSettings: _*)
+lazy val `example-2-persistence` = project.settings(reaktiveSettings: _*)
 
 lazy val `example-3-reaktive` = project.settings(reaktiveSettings: _*)
 
