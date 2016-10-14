@@ -4,7 +4,7 @@ scalaVersion := "2.11.8"
 
 val akkaVersion = "2.4.10"
 
-val reaktiveVersion = "0.0.11"
+val reaktiveVersion = "0.0.15"
 
 lazy val projectSettings = PB.protobufSettings ++ Seq(
   licenses := Seq(("MIT", url("http://opensource.org/licenses/MIT"))),
@@ -92,6 +92,7 @@ lazy val reaktiveSettings = persistenceSettings ++ Seq(
     "com.tradeshift" %% "ts-reaktive-kamon-akka-cluster" % reaktiveVersion,
     "com.tradeshift" %% "ts-reaktive-kamon-log4j" % reaktiveVersion,
     "com.tradeshift" % "ts-reaktive-marshal" % reaktiveVersion,
+    "com.tradeshift" % "ts-reaktive-marshal-akka" % reaktiveVersion,
     "com.tradeshift" % "ts-reaktive-testkit" % reaktiveVersion % "test",
     "com.tradeshift" % "ts-reaktive-testkit-assertj" % reaktiveVersion % "test",    
     "com.github.tomakehurst" % "wiremock" % "1.58" % "test"
@@ -106,11 +107,14 @@ lazy val `example-2-persistence` = project.settings(reaktiveSettings: _*)
 
 lazy val `example-3-cluster` = project.settings(reaktiveSettings: _*)
 
+lazy val `example-4-stream` = project.settings(reaktiveSettings: _*)
+
 lazy val root = (project in file(".")).settings(publish := { }, publishLocal := { }).aggregate(
   `example-0-base`,
   `example-1-akka`,
   `example-2-persistence`,
-  `example-3-cluster`
+  `example-3-cluster`,
+  `example-4-stream`
 )
 
 // Don't publish the root artifact; only publish sub-projects
