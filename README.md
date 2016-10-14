@@ -23,7 +23,7 @@ Generate eclipse project files by running `sbt eclipse` from the command line. Y
 
 ### Developing using IntelliJ
 
-IntelliJ should be able to open sbt-based projects directly.
+IntelliJ should be able to open sbt-based projects directly, if the Scala and SBT plugins are installed.
 
 ### Downgrading to Maven
 
