@@ -104,13 +104,13 @@ lazy val `example-1-akka` = project.settings(projectSettings: _*)
 
 lazy val `example-2-persistence` = project.settings(reaktiveSettings: _*)
 
-lazy val `example-3-reaktive` = project.settings(reaktiveSettings: _*)
+lazy val `example-3-cluster` = project.settings(reaktiveSettings: _*)
 
 lazy val root = (project in file(".")).settings(publish := { }, publishLocal := { }).aggregate(
   `example-0-base`,
   `example-1-akka`,
   `example-2-persistence`,
-  `example-3-reaktive`
+  `example-3-cluster`
 )
 
 // Don't publish the root artifact; only publish sub-projects
