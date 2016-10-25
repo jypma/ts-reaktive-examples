@@ -26,7 +26,7 @@ rm -rf example-0-base/*
 tar czvf workshop-3-cluster.tgz build.sbt example* project README* sbt*
 
 git reset HEAD --hard
-rm -rf example-2-reaktive/src/main/java
+rm -rf example-2-persistence/src/main/java
 cp -rp example-1-akka/src/main/java example-2-persistence/src/main
 rm -rf example-4-stream/src/main/java
 rm -rf example-3-cluster/*
